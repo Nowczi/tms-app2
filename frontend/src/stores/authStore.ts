@@ -26,6 +26,7 @@ export const useAuthStore = create<AuthState>()(
             firstName: auth.firstName,
             lastName: auth.lastName,
             role: auth.role as 'ADMIN' | 'DISPATCHER' | 'DRIVER',
+            isActive: auth.isActive ?? true, // Default to true if not provided
           },
           token: auth.token,
           isAuthenticated: true,
