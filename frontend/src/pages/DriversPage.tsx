@@ -63,7 +63,7 @@ export default function DriversPage() {
   const filteredDrivers = drivers?.filter((driver) => {
     const matchesSearch =
       !search ||
-      driver.fullName.toLowerCase().includes(search.toLowerCase()) ||
+      driver.fullName?.toLowerCase().includes(search.toLowerCase()) ||
       driver.phone?.includes(search);
     return matchesSearch;
   });
@@ -136,7 +136,7 @@ export default function DriversPage() {
                     {driver.licenseExpiryStatus === 'CRITICAL' || driver.licenseExpiryStatus === 'EXPIRED' ? (
                       <Warning color="error" sx={{ mr: 1 }} fontSize="small" />
                     ) : null}
-                    {driver.fullName}
+                    {driver.fullName || `${driver.firstName} ${driver.lastName}`}
                   </Box>
                 </TableCell>
                 <TableCell>{driver.phone || '-'}</TableCell>
