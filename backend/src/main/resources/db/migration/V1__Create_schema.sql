@@ -1,9 +1,4 @@
--- ========================================================
--- TMS Database Schema Creation
--- Flyway Migration V1 - Initial Schema
--- ========================================================
-
--- Users table
+-- ========================================================-- TMS Database Schema Creation-- Flyway Migration V1 - Initial Schema-- ========================================================-- Users table
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
@@ -55,18 +50,17 @@ CREATE TABLE IF NOT EXISTS vehicles (
     CONSTRAINT fk_vehicle_driver FOREIGN KEY (assigned_driver_id) REFERENCES drivers(id) ON DELETE SET NULL
 );
 
--- Documents table
+-- Documents table - Using UUID to match entity
 CREATE TABLE IF NOT EXISTS documents (
-    id BIGSERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     file_name VARCHAR(255) NOT NULL,
-    file_type VARCHAR(100),
+    file_url VARCHAR(500) NOT NULL,
+    file_type VARCHAR(50),
     file_size BIGINT,
-    file_path VARCHAR(500),
-    description TEXT,
-    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expiry_date DATE,
-    document_type VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    entity_type VARCHAR(50),
+    entity_id BIGINT,
+    uploaded_by VARCHAR(100),
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -121,16 +115,16 @@ CREATE TABLE IF NOT EXISTS order_history (
     CONSTRAINT fk_history_changer FOREIGN KEY (changed_by_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- Order documents junction table
+-- Order documents table - Standalone entity table (not junction table)
 CREATE TABLE IF NOT EXISTS order_documents (
     id BIGSERIAL PRIMARY KEY,
     order_id BIGINT NOT NULL,
-    document_id BIGINT NOT NULL,
-    document_type VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_od_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    CONSTRAINT fk_od_document FOREIGN KEY (document_id) REFERENCES documents(id) ON DELETE CASCADE,
-    CONSTRAINT uk_order_document UNIQUE (order_id, document_id)
+    file_name VARCHAR(255) NOT NULL,
+    file_url VARCHAR(500) NOT NULL,
+    file_type VARCHAR(50),
+    uploaded_by VARCHAR(100),
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orderdoc_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
 -- GPS locations table
@@ -173,9 +167,6 @@ CREATE INDEX IF NOT EXISTS idx_order_history_created_at ON order_history(created
 
 CREATE INDEX IF NOT EXISTS idx_gps_locations_driver ON gps_locations(driver_id);
 CREATE INDEX IF NOT EXISTS idx_gps_locations_recorded_at ON gps_locations(recorded_at);
-
-CREATE INDEX IF NOT EXISTS idx_documents_expiry ON documents(expiry_date);
-CREATE INDEX IF NOT EXISTS idx_documents_type ON documents(document_type);
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
