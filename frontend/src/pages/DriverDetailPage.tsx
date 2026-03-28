@@ -55,7 +55,7 @@ export default function DriverDetailPage() {
           <Button startIcon={<ArrowBack />} onClick={() => navigate('/drivers')} sx={{ mr: 2 }}>
             Powrót
           </Button>
-          <Typography variant="h4">{driver.fullName}</Typography>
+          <Typography variant="h4">{driver.fullName || `${driver.firstName} ${driver.lastName}`}</Typography>
           <Chip
             label={statusLabels[driver.status]}
             color={statusColors[driver.status] as any}
@@ -239,8 +239,8 @@ export default function DriverDetailPage() {
                     <Typography variant="body2" color="text.secondary">
                       Problemy
                     </Typography>
-                    <Typography variant="h4" color={driver.problemCount > 0 ? 'error' : 'inherit'}>
-                      {driver.problemCount || 0}
+                    <Typography variant="h4" color={(driver.problemCount ?? 0) > 0 ? 'error' : 'inherit'}>
+                      {driver.problemCount ?? 0}
                     </Typography>
                   </CardContent>
                 </Card>

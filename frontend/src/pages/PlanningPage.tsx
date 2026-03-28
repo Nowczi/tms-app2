@@ -129,7 +129,7 @@ export default function PlanningPage() {
       {conflicts.length > 0 && (
         <Box sx={{ mb: 3 }}>
           {conflicts.map((conflict, index) => (
-            <Alert key={index} severity={conflict.severity === 'HIGH' ? 'error' : 'warning'} sx={{ mb: 1 }}>
+            <Alert key={index} severity={conflict.severity === 'ERROR' || conflict.severity === 'CRITICAL' ? 'error' : 'warning'} sx={{ mb: 1 }}>
               {conflict.message}
             </Alert>
           ))}
@@ -162,9 +162,9 @@ export default function PlanningPage() {
                         sx={{ mr: 1 }}
                       />
                       <Chip
-                        label={`${driver.weightPercentage.toFixed(0)}%`}
+                        label={`${(driver.weightPercentage ?? 0).toFixed(0)}%`}
                         size="small"
-                        color={driver.weightPercentage > 90 ? 'error' : driver.weightPercentage > 70 ? 'warning' : 'success'}
+                        color={(driver.weightPercentage ?? 0) > 90 ? 'error' : (driver.weightPercentage ?? 0) > 70 ? 'warning' : 'success'}
                       />
                     </Box>
                   </AccordionSummary>
@@ -177,7 +177,7 @@ export default function PlanningPage() {
                         Godziny: {driver.workingHours}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Waga: {driver.currentWeight.toFixed(0)} / {driver.maxWeight.toFixed(0)} kg
+                        Waga: {(driver.currentWeight ?? 0).toFixed(0)} / {(driver.maxWeight ?? 0).toFixed(0)} kg
                       </Typography>
                     </Box>
                     {driver.orders.length > 0 ? (
@@ -298,7 +298,7 @@ export default function PlanningPage() {
                   <Popup>
                     <Typography variant="body2">{location.driverName}</Typography>
                     <Typography variant="caption">
-                      {format(new Date(location.recordedAt), 'HH:mm', { locale: pl })}
+                      {location.recordedAt ? format(new Date(location.recordedAt), 'HH:mm', { locale: pl }) : '-'}
                     </Typography>
                   </Popup>
                 </Marker>

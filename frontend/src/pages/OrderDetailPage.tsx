@@ -272,7 +272,7 @@ export default function OrderDetailPage() {
                         color={statusColors[entry.status as OrderStatus] as any}
                       />
                     </TableCell>
-                    <TableCell>{format(new Date(entry.createdAt), 'dd.MM.yyyy HH:mm', { locale: pl })}</TableCell>
+                    <TableCell>{entry.createdAt ? format(new Date(entry.createdAt), 'dd.MM.yyyy HH:mm', { locale: pl }) : '-'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

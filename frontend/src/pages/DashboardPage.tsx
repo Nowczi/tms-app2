@@ -118,13 +118,13 @@ export default function DashboardPage() {
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <Warning sx={{ mr: 1, color: kpi.ordersWithProblem > 0 ? 'error.main' : 'success.main' }} />
+                <Warning sx={{ mr: 1, color: (kpi.ordersWithProblem ?? 0) > 0 ? 'error.main' : 'success.main' }} />
                 <Typography color="text.secondary" variant="body2">
                   Problemy
                 </Typography>
               </Box>
-              <Typography variant="h4" color={kpi.ordersWithProblem > 0 ? 'error' : 'inherit'}>
-                {kpi.ordersWithProblem}
+              <Typography variant="h4" color={(kpi.ordersWithProblem ?? 0) > 0 ? 'error' : 'inherit'}>
+                {kpi.ordersWithProblem ?? 0}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 zleceń z problemem
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                 {alerts.map((alert, index) => (
                   <Alert
                     key={index}
-                    severity={alert.severity === 'HIGH' ? 'error' : alert.severity === 'MEDIUM' ? 'warning' : 'info'}
+                    severity={alert.severity === 'CRITICAL' || alert.severity === 'ERROR' ? 'error' : alert.severity === 'WARNING' ? 'warning' : 'info'}
                     sx={{ mb: 1, cursor: alert.link ? 'pointer' : 'default' }}
                     onClick={() => alert.link && navigate(alert.link)}
                   >
@@ -204,11 +204,11 @@ export default function DashboardPage() {
                   </Box>
                   <LinearProgress
                     variant="determinate"
-                    value={workload.weightPercentage}
-                    color={workload.weightPercentage > 90 ? 'error' : workload.weightPercentage > 70 ? 'warning' : 'primary'}
+                    value={workload.weightPercentage ?? 0}
+                    color={(workload.weightPercentage ?? 0) > 90 ? 'error' : (workload.weightPercentage ?? 0) > 70 ? 'warning' : 'primary'}
                   />
                   <Typography variant="caption" color="text.secondary">
-                    {workload.totalWeight.toFixed(0)} kg / {workload.maxWeight.toFixed(0)} kg
+                    {(workload.totalWeight ?? 0).toFixed(0)} kg / {(workload.maxWeight ?? 0).toFixed(0)} kg
                   </Typography>
                 </Box>
               ))}
@@ -265,7 +265,7 @@ export default function DashboardPage() {
         </Typography>
         <Box sx={{ height: 300 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={statistics.dailyStats}>
+            <BarChart data={(statistics.dailyStats as any) || []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="label" />
               <YAxis />
@@ -277,13 +277,13 @@ export default function DashboardPage() {
         </Box>
         <Box sx={{ mt: 2, display: 'flex', gap: 4, justifyContent: 'center' }}>
           <Typography variant="body2">
-            <strong>Łącznie zleceń:</strong> {statistics.totalOrders}
+            <strong>Łącznie zleceń:</strong> {statistics.totalOrders ?? 0}
           </Typography>
           <Typography variant="body2">
-            <strong>% na czas:</strong> {statistics.onTimePercentage}%
+            <strong>% na czas:</strong> {statistics.onTimePercentage ?? 0}%
           </Typography>
           <Typography variant="body2">
-            <strong>Problemy:</strong> {statistics.problemCount}
+            <strong>Problemy:</strong> {statistics.problemCount ?? 0}
           </Typography>
         </Box>
       </Paper>

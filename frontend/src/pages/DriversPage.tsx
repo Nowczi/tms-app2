@@ -143,23 +143,23 @@ export default function DriversPage() {
                 <TableCell>{driver.assignedVehicleRegistration || '-'}</TableCell>
                 <TableCell>
                   <Chip
-                    label={driver.licenseExpiry}
+                    label={driver.licenseExpiry || '-'}
                     size="small"
-                    color={getExpiryColor(driver.licenseExpiryStatus) as any}
+                    color={getExpiryColor(driver.licenseExpiryStatus || 'VALID') as any}
                   />
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={driver.medicalExamExpiry}
+                    label={driver.medicalExamExpiry || '-'}
                     size="small"
-                    color={getExpiryColor(driver.medicalExamExpiryStatus) as any}
+                    color={getExpiryColor(driver.medicalExamExpiryStatus || 'VALID') as any}
                   />
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={driver.contractExpiry}
+                    label={driver.contractExpiry || '-'}
                     size="small"
-                    color={getExpiryColor(driver.contractExpiryStatus) as any}
+                    color={getExpiryColor(driver.contractExpiryStatus || 'VALID') as any}
                   />
                 </TableCell>
                 <TableCell>

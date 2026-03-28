@@ -147,16 +147,16 @@ export default function VehiclesPage() {
                 <TableCell>{vehicle.loadCapacity || '-'}</TableCell>
                 <TableCell>
                   <Chip
-                    label={vehicle.insuranceExpiry}
+                    label={vehicle.insuranceExpiry || '-'}
                     size="small"
-                    color={getExpiryColor(vehicle.insuranceExpiryStatus) as any}
+                    color={getExpiryColor(vehicle.insuranceExpiryStatus || 'VALID') as any}
                   />
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={vehicle.inspectionExpiry}
+                    label={vehicle.inspectionExpiry || '-'}
                     size="small"
-                    color={getExpiryColor(vehicle.inspectionExpiryStatus) as any}
+                    color={getExpiryColor(vehicle.inspectionExpiryStatus || 'VALID') as any}
                   />
                 </TableCell>
                 <TableCell>
